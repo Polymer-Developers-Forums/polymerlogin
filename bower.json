@@ -1,0 +1,25 @@
+{
+  "name": "polymerlogin",
+  "homepage": "https://github.com/Polymer-Developers-Forums/polymerlogin.git",
+  "description": "polymerlogin",
+  "main": "polymerlogin.html",
+  "keywords": [
+    "polymerlogin"
+  ],
+  "authors": [
+    "Kishore"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "paper-input": "^2.0.1",
+    "paper-button": "^2.0.0",
+    "iron-ajax": "^2.0.4"
+  }
+}

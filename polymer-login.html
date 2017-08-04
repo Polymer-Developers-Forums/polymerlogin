@@ -1,0 +1,246 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<dom-module id="polymer-login">  
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
+       ::selection {
+        background-color: #b5e2e7;
+      }
+
+       ::-moz-selection {
+        background-color: #8ac7d8;
+      }
+
+       .container {
+            display: -webkit-flex;
+            display: flex;
+            height: 100%;
+            }
+
+             h2 {
+            text-align: center;
+            font-size: 175%;
+            color: #757575;
+            font-weight: 300;
+            }
+
+      #Reg {
+        margin: 10% auto;
+        min-width: 750px;
+        background-color: #fff;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            -ms-border-radius: 4px;
+            border-radius: 4px;
+            -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+            -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+            min-width: 450px;
+      }
+      paper-input{
+        margin:0 30px;
+        padding:0px;
+      }
+      paper-input:focus{
+        outline: none;
+        border-bottom-color: #ff6200 !important;
+      }
+
+      .RegButton {
+            position: relative;
+            width: 85%;
+            height: 50px;
+            display: block;
+            margin: 30px auto 30px;
+            color: white;
+            background-color: #ff6200;
+            border: none;
+            } 
+          paper-button {
+        font-family: 'Roboto', 'Noto', sans-serif;
+        font-weight: normal;
+        font-size: 20px;
+        -webkit-font-smoothing: antialiased;
+        width: 85%;
+        height: 50px;
+        display: block;
+        margin: 30px auto 30px;
+        color: white;
+        background-color: #ff6200;
+        border: none;
+        text-align: center;
+      }
+    </style>
+    <div class="container">
+      <div id="Reg">
+        <form name="form">
+          <h2>LOGIN</h2>
+          <paper-input id="useremail" name="useremail" value="{{loginDetails.useremail::input}}" type="email" placeholder="USERNAME@DOMAIN.COM"
+            autofocus="autofocus" required error-message="Enter Valid Username" auto-validate>
+          </paper-input>         
+          <paper-input id="password"  minlength="8" value="{{loginDetails.password::input}}" maxlength="12" name="password" type="password" placeholder="PASSWORD" error-message="Please enter valid Password" auto-validate required></paper-input>         
+          <paper-button class="RegButton" id="submitbtn" type="button" label="LOGIN" on-click="submituser">Login</paper-button>
+        </form>
+      </div>
+    </div>
+ <iron-ajax
+    url="#"
+    handle-as="json"
+    method="POST"
+    params='[[getParams]]'
+    on-response="handleResponse"
+    debounce-duration="" id="">
+  </iron-ajax>
+  </template>
+  <script>
+    class polymerLogin extends Polymer.Element {
+      static get is() { return 'polymer-login'; }
+      static get properties() {
+        return {
+          pagetitle: {
+            type: String,
+            value: 'Login Form'
+          },
+          useremail: {
+            type: String,
+            value: '',
+            observer: 'emailidentification',
+            reflectToAttribute: true
+          },
+          password: {
+            type: String,
+            reflectToAttribute: true
+          },
+          loginstatus: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            reflectToAttribute: true
+          },
+          message: {
+            type: String,
+            Value: '',
+            reflectToAttribute: true
+          },
+
+          messageemail: {
+            type: String,
+            Value: '',
+            reflectToAttribute: true
+          },
+           messagepwd: {
+            type: String,
+            Value: '',
+            reflectToAttribute: true
+          },
+          hide: {
+            type: Boolean,
+            value: true
+          },
+          hideemail: {
+            type: Boolean,
+            value: true
+          },
+          hidepwd: {
+            type: Boolean,
+            value: true
+          },
+          
+          getParams:  {
+            type:Object,
+            value : {useremail : "lorem@gmail.com", password:"1234"}
+          },
+          sessioninfo:{
+            type: Object,
+            value : {useremail : "c@xyz.com", password:"abc@9866"},
+            notify: true,
+            reflectToAttribute: true
+          },
+          loginDetails:{
+            type:Object,
+            value : {useremail : "customer1@abc.com", password:"abc@9866"},
+            notify: true,
+            reflectToAttribute: true
+          }
+          
+        };
+      }
+     
+      emailidentification(newval, oldval) {
+        let validemail = /^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+        // /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (validemail.test(newval)) {
+          this.messageemail = "valid";
+          this.hideemail = true;
+        } else {
+          this.messageemail = "invalid email";
+          if (newval != "") {
+            this.hideemail = false;
+          }
+        }
+
+      }
+      
+      submituser() {
+        let uemail = this.$.useremail.value;
+        let upass = this.$.password.value;
+        let subtn = this.$.submitbtn;
+        if (uemail == "" || upass == "") {
+          // alert("in if");
+          this.message = "Please Enter Valid Credentials!";
+          this.hide = false;
+        }
+        else {
+          console.log("useremail"+uemail+", password"+upass );
+          let values = {"useremail" : uemail, "password":upass };
+          this.getParams = values;          
+          this.$.getloginstatus.generateRequest();
+        }
+        let pwdptrn= /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,12})/;
+        if(pwdptrn.test(upass)){
+          this.messagepwd = "valid";
+          this.hidepwd = true;
+        }else{
+          this.messagepwd = "Please use special characters, upper and lowercase, digits with min 8 to 12 characters";
+          this.hidepwd = false;
+        }
+        let mailptrn = /^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+        if(mailptrn.test(uemail)){
+          this.messageemail = "valid";
+          this.hideemail = true;
+        }else{
+          this.messageemail = "Please Enter valid email";
+          this.hideemail = false;
+        }
+      }
+
+      handleResponse(res) {
+        if(res.detail.response.status == 'failed') {
+          this.message = "Username and Password doesn't match, Please try again";
+          this.hide = false;
+        } else if(res.detail.response.status == 'success'){
+          this.sessioninfo = res.detail.response;
+        } else {
+          this.message = "Something went wrong. Please try again later.";
+          this.hide = false;
+        }        
+      }
+    }
+    window.customElements.define(polymerLogin.is, polymerLogin);
+  </script>
+
+</dom-module>

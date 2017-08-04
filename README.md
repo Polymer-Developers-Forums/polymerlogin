@@ -30,7 +30,7 @@ To install this component, follow the procedure:
     <meta name="mobile-web-app-capable" content="yes">
     <title>Polymer Project</title>
     <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>   
-     <link rel="import" href="bower_components/polymer-login-form/polymer-login.html" />    
+     <link rel="import" href="bower_components/polymerlogin/polymer-login.html" />    
 </head>
 <body>
       
